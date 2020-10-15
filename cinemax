@@ -1,0 +1,196 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+class th
+{
+private:
+    int status;
+    string name;
+
+public:
+    th *prev;
+    th *next;
+    th *first[10];
+
+    th()
+    {
+        for (int y = 0; y < 10; y++)
+            first[y] = NULL;
+    }
+
+    void create();
+    void display();
+    void book();
+    void info();
+    void deleteseat();
+};
+
+void th::create()
+{
+    th *nn;
+    int i, j;
+    for (i = 0; i < 10; i++)
+    {
+        for (j = 1; j <= 7; j++)
+        {
+            nn = new th;
+            nn->status = 0;
+            nn->prev = NULL;
+            nn->next = NULL;
+
+            if (first[i] == NULL)
+            {
+                first[i] = nn;
+                nn->prev = first[i];
+                nn->next = first[i];
+            }
+            else
+            {
+                th *cn;
+                cn = first[i];
+                while (cn->next != first[i])
+                {
+                    cn = cn->next;
+                }
+                cn->next = nn;
+                nn->next = first[i];
+                nn->prev = cn;
+                first[i]->prev = nn;
+            }
+        }
+    }
+}
+
+void th::display()
+{
+    int i;
+    cout << "\t1\t2\t3\t4\t5\t6\t7\t\n\n";
+    for (i = 0; i < 10; i++)
+    {
+        cout << i + 1 << "\t";
+        th *t;
+        t = first[i];
+
+        do
+        {
+            if (t->status == 0)
+            {
+                cout << "A\t";
+            }
+
+            else
+            {
+                cout << "B\t";
+            }
+            t = t->next;
+        }
+        while (t != first[i]);
+        cout << "\n";
+    }
+    cout<<"\n----------------------------------------------------------------------\n";
+    cout<<"             SCREEN               \n";
+}
+
+void th::book()
+{
+    int i, j, r, c;
+    th *t;
+    cout << "\nEnter the row you want:\t";
+    cin >> r;
+    cout << "\nEnter the column you want:\t";
+    cin >> c;
+    
+        t = first[r-1];
+        for (j = 0; j < c-1; j++)
+        {
+            t = t->next;
+        }
+    
+    if(t->status == 0)
+    {
+        t->status = 1;
+        cout<<"\nEnter your name\n";
+        cin>>t->name;
+    }
+    else
+    {
+        cout<<"\nAlready Booked!!";
+    }
+}
+
+void th::info()
+{
+    int i, j, r, c;
+    th *t;
+    cout << "\nEnter the row you want to search:\t";
+    cin >> r;
+    cout << "\nEnter the column you want to search:\t";
+    cin >> c;
+   
+        t = first[r-1];
+        for (j = 0; j < c-1; j++)
+        {
+            t = t->next;
+        }
+    
+    if(t->status == 1)
+        cout<<"\nName :\t"<<t->name<<endl;
+
+    else
+        cout<<"\nEmpty SEAT!!\t"<<endl;
+}
+
+void th:: deleteseat()
+{
+    int i, j, r, c;
+    th *t;
+    cout << "\nEnter the row number of your seat:\t";
+    cin >> r;
+    cout << "\nEnter the column number of your seat:\t";
+    cin >> c;
+   
+        t = first[r-1];
+        for (j = 0; j < c-1; j++)
+        {
+            t = t->next;
+        }
+    
+    if(t->status == 1)
+    {
+        t->status = 0;
+        cout<<"\nSeat cancelled !!\n";
+    }
+}
+int main()
+{
+    int a;
+
+    th the;
+    for(int l = 0; l < 10 ; l++)
+    {
+
+        cout<<"Enter from foll.:\n1.Create all Seats.\n2.Book A seat.\n3.Display available seats.\n4.Display INFO.\n5.Cancel Booking\n";
+        cin>>a;
+
+        switch(a)
+        {
+        case 1:
+            the.create();
+          //  the.display();
+            break;
+        case 2:
+            the.book();
+            break;
+        case 3:
+            the.display();
+            break;
+        case 4:
+            the.info();
+            break;
+        case 5:
+            the.deleteseat();
+            break;
+        }
+    }
+}
